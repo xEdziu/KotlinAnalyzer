@@ -8,42 +8,38 @@ import org.jetbrains.kotlin.idea.KotlinFileType
 import org.jetbrains.kotlin.psi.*
 import org.jetbrains.kotlin.lexer.KtTokens
 import java.io.File
-import kotlin.system.exitProcess
 
 
 fun main(args: Array<out String>) {
-    if (args.isEmpty()) {
-        println("Usage: main <filePath>")
-        return
-    }
-    val filePath = args[0]
 
-    // Inicjalizacja środowiska kompilatora Kotlin
+    val filePath = if (args.isNotEmpty()) args[0] else {
+        "src/main/resources/testDir"
+    }
+
     val disposable = Disposer.newDisposable()
     val config = CompilerConfiguration()
     val environment = KotlinCoreEnvironment.createForProduction(disposable, config, EnvironmentConfigFiles.JVM_CONFIG_FILES)
     val project = environment.project
 
-    // Sprawdzanie ścieżki
     val file = File(filePath)
     if (!file.exists()) {
         System.err.println("Error: '$filePath' does not exist.")
         return
     }
 
-    if (file.isDirectory) {
-        val kotlinFiles = file.listFiles { f -> f.extension == "kt" || f.extension == "kts" }
-        if (kotlinFiles.isNullOrEmpty()) {
-            return
-        }
-    } else if (!file.isFile) {
-        System.err.println("Error: '$filePath' is not a valid file.")
-        exitProcess(1)
+    val kotlinFiles = if (file.isDirectory) {
+        getKotlinFilesRecursively(file)
+    } else {
+        listOf(file)
+    }
+
+    if (kotlinFiles.isEmpty()) {
+        System.err.println("Error: No Kotlin files found in '$filePath'.")
+        return
     }
 
     val outputBuilder = StringBuilder()
 
-    // Parsowanie pliku
     fun parseFile(file: File): KtFile? {
         return try {
             val text = file.readText()
@@ -114,11 +110,20 @@ fun main(args: Array<out String>) {
         }
     }
 
-    val ktFile = parseFile(file)
-    if (ktFile == null) {
-        return  // No output if the file could not be parsed
+    kotlinFiles.forEach { file ->
+        val ktFile = parseFile(file)
+        ktFile?.declarations?.forEach { processDeclaration(it, true, 0) }
     }
-    ktFile.declarations.forEach { processDeclaration(it, true, 0) }
 
     println(outputBuilder.toString())
+}
+
+fun getKotlinFilesRecursively(dir: File): List<File> {
+    val kotlinFiles = mutableListOf<File>()
+    dir.walk().forEach {
+        if (it.isFile && (it.extension == "kt" || it.extension == "kts")) {
+            kotlinFiles.add(it)
+        }
+    }
+    return kotlinFiles
 }

@@ -95,6 +95,8 @@ class MainTest {
         main(args)
     }
 
+
+
     // Pobiera przechwycone wyjście programu
     private fun getOutput(): String {
         return outputStream.toString()

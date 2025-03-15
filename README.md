@@ -4,9 +4,21 @@ This is a project for applying to JetBrains Internship 2025 3.0. The task is to 
 
 ## My journey through this project
 
-[15.03.2025]
-
 In the beginning, I would like to emphasize that I have almost no experience working with Kotlin.
 I have been working with Java for a long regarding mobile applications and now, during my 6th semester on Uni, I am trying to switch from Java to Kotlin while developing mobile apps.
 
 It seems very easy to switch from Java to Kotlin, so we will see where it will go :)
+
+> Some time later...
+
+So, I learned about PSI or Program Structure Interface, which is a part of the IntelliJ Platform. I was worried that I should write a parser for Kotlin files myself, but it seems that I 
+will be able to use PSI to get the Abstract Syntax Tree of the Kotlin code.
+
+> Even more time later...
+
+After complex research and trial and error, I managed to get the PSI tree of the Kotlin file. I have written a simple program that reads the Kotlin file and prints the public declarations.
+
+I've also written some tests to check if the program works correctly.
+
+It was tested with the [Exposed](https://github.com/JetBrains/Exposed) library as it was suggested in the task description.
+It seems that the program works correctly and prints all public declarations from the Exposed library.
