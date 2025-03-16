@@ -22,3 +22,14 @@ I've also written some tests to check if the program works correctly.
 
 It was tested with the [Exposed](https://github.com/JetBrains/Exposed) library as it was suggested in the task description.
 It seems that the program works correctly and prints all public declarations from the Exposed library.
+
+## How does the program work?
+
+- At the beginning, the program checks if the user has provided the path to the Kotlin file or directory.
+If the user has not provided the path, the program will use the default path to the `testDir` directory to showcase the program.
+
+- Next, the program reads the file / files in directory and subdirectories and parses them using the LightVirtualFile 
+and creates a Project Structure Interface (PSI) tree.
+
+- Finally, for each found file, the program searches for public declarations and adds them to the string builder, while also formatting the output
+and printing it to the console.
