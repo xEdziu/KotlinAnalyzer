@@ -15,6 +15,11 @@ class FileParser {
     private val environment = KotlinCoreEnvironment.createForProduction(disposable, config, EnvironmentConfigFiles.JVM_CONFIG_FILES)
     private val project = environment.project
 
+    /**
+     * Parses a Kotlin file and returns a KtFile object.
+     * @param file The file to parse.
+     * @return The KtFile object, or null if the file could not be parsed.
+     */
     fun parseFile(file: File): KtFile? {
         return try {
             val text = file.readText()

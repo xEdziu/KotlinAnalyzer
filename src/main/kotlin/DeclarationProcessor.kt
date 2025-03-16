@@ -5,11 +5,23 @@ class DeclarationProcessor {
 
     private val outputBuilder = StringBuilder()
 
+    /**
+     * Wrapper function to process declarations in a Kotlin file.
+     * @param ktFile: KtFile - Kotlin file to process.
+     * @return String - Processed declarations.
+     */
     fun processDeclarations(ktFile: KtFile): String {
         ktFile.declarations.forEach { processDeclaration(it, true, 0) }
         return outputBuilder.toString()
     }
 
+    /**
+     * Function to process a single declaration.
+     * Individually processes functions, properties, classes, objects, and type aliases, adding them to the output.
+     * @param decl: KtDeclaration - Declaration to process.
+     * @param containerIsPublic: Boolean - Whether the container of the declaration is public.
+     * @param level: Int - Indentation level.
+     */
     private fun processDeclaration(decl: KtDeclaration, containerIsPublic: Boolean, level: Int) {
         if (!containerIsPublic) return
 
@@ -67,5 +79,10 @@ class DeclarationProcessor {
         }
     }
 
+    /**
+     * Function to generate indentation based on the level.
+     * @param level: Int - Indentation level.
+     * @return String - Indentation string.
+     */
     private fun indent(level: Int) = "    ".repeat(level)
 }
